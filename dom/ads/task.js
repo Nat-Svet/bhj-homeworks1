@@ -1,5 +1,5 @@
 const rotator = document.querySelector(".rotator");
-const rotatorCase = rotator.querySelectorAll("div");
+const rotatorCase = rotator.querySelectorAll(".rotator__case");
 const rotatorCaseArray = Array.from(rotatorCase);
 
 let currentIndex = 0;
