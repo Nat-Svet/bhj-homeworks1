@@ -66,15 +66,18 @@ productAddButtons.forEach(button => {
 
             //клонируем фото и добавляем к товару
             let productImg = productChosen.querySelector("img").cloneNode(true);
+            productImg.style = "width: 100px; height: 100px; object-fit: contain;"
             newCartProduct.append(productImg);
+
 
             //создаем счетчик товара и добавляем к товару
             let newProductCount = document.createElement("div");
             newProductCount.className = "cart__product-count";
             newProductCount.textContent = productQuantity;
+            newProductCount.style = "font-weight: bold; min-width: 20px;  text-align: center;"
             newCartProduct.append(newProductCount);
 
-                      
+
             //добавляем новый товар в корзину
             cartProducts.append(newCartProduct);
         }
