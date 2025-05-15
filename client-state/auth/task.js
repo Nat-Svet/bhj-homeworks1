@@ -1,4 +1,31 @@
+
+const signin = document.getElementById("signin");
 const signinForm = document.getElementById("signin__form");
+const welcome = document.getElementById("welcome");
+const userIdSpan = document.getElementById("user_id");
+
+//localStorage.clear(); //использовала для проверки
+
+//показываем форму авторизации и скрываем приветствие
+function showSignin() {
+    signin.classList.add("signin_active");
+    welcome.classList.remove("welcome_active");
+}
+
+//показываем приветствие и скрываем форму авторизации
+function showWelcome(userId) {
+    userIdSpan.textContent = userId;
+    welcome.classList.add("welcome_active");
+    signin.classList.remove("signin_active");
+}
+
+//проверяем, есть ли сохраненный пользователь
+const savedUserId = localStorage.getItem("userId");
+if (savedUserId) {
+    showWelcome(savedUserId);
+} else {
+    showSignin();
+}
 
 //вешаем обработчик на форму
 signinForm.addEventListener("submit", function (event) {
@@ -13,26 +40,28 @@ signinForm.addEventListener("submit", function (event) {
     //инициализируем запрос
     xhr.open("POST", "https://students.netoservices.ru/nestjs-backend/auth");
 
+    // Указываем что ответ ожидается в формате JSON
+    xhr.responseType = "json";
+
     //работаем с результатами ответа сервера
     xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
-            const response = JSON.parse(xhr.responseText);
+            const response = xhr.response;
 
             if (response.success) {
-                const userIdSpan = document.getElementById("user_id");
-                userIdSpan.textContent = response.user_id;
-
                 //сохраняем в local storage
                 localStorage.setItem("userId", response.user_id);
-
-                // вызываем окна
-                const welcome = document.getElementById("welcome");
-                welcome.classList.add("welcome_active");
+                showWelcome(response.user_id);
+                signinForm.reset();
             } else {
                 alert("Неверный логин/пароль");
+                signinForm.reset();
             }
         }
     };
-//отправляем запрос
+
     xhr.send(formData);
+
 });
+
+
